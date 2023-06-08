@@ -1,0 +1,28 @@
+﻿@using SocialMedia.Models
+@model User
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <img class="card-img-top" src="@Model.Photo" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.UserName</h5>
+                    <p class="card-text">@Model.Biography</p>
+                    <a href="#" class="btn btn-primary">Profile Git</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+
+        </div>
+    </div>
+</div>
+
