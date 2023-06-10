@@ -1,0 +1,63 @@
+﻿@using SocialMedia.Models
+@model dynamic
+
+@{
+    ViewBag.Title = "Friends";
+}
+
+<h2>Friends</h2>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Toplam: @Model.CountFolloweds</th>
+                        <th scope="col">Kullanıcı Adı</th>
+                        <th scope="col">İsim</th>
+                        <th scope="col">Soyisim</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 1; i < (Model.Followeds.Count +1); i++)
+                    {
+                        var followed = Model.Followeds[i-1];
+                        <tr>
+                            <th scope="row">@i</th>
+                            <td>@followed.UserName</td>
+                            <td>@followed.Name</td>
+                            <td>@followed.Surname</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Toplam: @Model.CountFollowers</th>
+                        <th scope="col">Kullanıcı Adı</th>
+                        <th scope="col">İsim</th>
+                        <th scope="col">Soyisim</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 1; i < (Model.Followers.Count + 1); i++)
+                    {
+                        var follower = Model.Followers[i-1];
+                        <tr>
+                            <th scope="row">@i</th>
+                            <td>@follower.UserName</td>
+                            <td>@follower.Name</td>
+                            <td>@follower.Surname</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

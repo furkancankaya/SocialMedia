@@ -39,9 +39,15 @@ namespace SocialMedia.Repositories
             var data = db.Content.Where(x => x.UserId == userId).ToList();
             return data;
         }
-        public List<Content> GetAllContents(int userId)
+        public List<Content> GetAllMyContents(int userId)
         {
-           var myFollowedUserIds =followRepository.GetAllMyFollowed(userId).Select(x=>x.FollowedUserId).ToList();
+           
+            var data = db.Content.Where(x => x.UserId==userId).ToList();
+            return data;
+        }
+        public List<Content> GetAllFollowedContents(int userId)
+        {
+            var myFollowedUserIds = followRepository.GetAllMyFollowed(userId).Select(x => x.Id).ToList();
             var data = db.Content.Where(x => myFollowedUserIds.Contains(x.UserId)).ToList();
             return data;
         }

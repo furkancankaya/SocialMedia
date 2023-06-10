@@ -38,8 +38,8 @@ namespace SocialMedia.Controllers
             else
             {
                 ViewBag.Message = "Giriş başarılı.";
-                Session["id"] = user.Id;
-                return RedirectToAction("Index","HomePage", new { data = user });
+                Session["id"] = loginUser.Id;
+                return RedirectToAction("Index","HomePage");
             }
 
            
@@ -63,6 +63,7 @@ namespace SocialMedia.Controllers
                 if (status == true)
                 {
                     ViewBag.Message = "Başarıyla kayıt oldunuz.";
+                    return RedirectToAction("Login", "Users", new { data = user });
                 }
                 else
                 {

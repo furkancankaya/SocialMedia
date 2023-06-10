@@ -17,6 +17,9 @@
         <input class="form-control" type="password" name="Password" id="Password" placeholder="**************" required />
     </div>
     
-    <button type="submit" class="btn btn-primary">Giriş</button>
+        <button type="submit" class="btn btn-primary ">Giriş</button>
+        <p>@Html.ActionLink("Kayıt olmak için tıklayın.", "SignUp", "Users", new { area = "" }, new { @class = "nav-link" })</p>
+    
+    
 </form>
 <span> @ViewBag.Message</span>

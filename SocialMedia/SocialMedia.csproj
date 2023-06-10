@@ -224,6 +224,9 @@
     <Content Include="Views\Users\Login.cshtml" />
     <Content Include="Views\Users\SignUp.cshtml" />
     <Content Include="Views\HomePage\Index.cshtml" />
+    <Content Include="Views\HomePage\Profile.cshtml" />
+    <Content Include="Views\HomePage\ProfileEdit.cshtml" />
+    <Content Include="Views\HomePage\Friends.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

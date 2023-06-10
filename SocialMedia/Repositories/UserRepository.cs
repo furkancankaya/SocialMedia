@@ -1,4 +1,5 @@
-﻿using SocialMedia.InterFaces;
+﻿using Microsoft.Ajax.Utilities;
+using SocialMedia.InterFaces;
 using SocialMedia.Models;
 using StockManagementProject.DataAccessLayer;
 using System;
@@ -69,16 +70,16 @@ namespace StockManagementProject.Repositories
         public bool Update(User entity)
         {
             var user = db.User.FirstOrDefault(x => x.Id == entity.Id && x.IsStatus == true);
-            if (user != null && !String.IsNullOrWhiteSpace(entity.Name) && !String.IsNullOrWhiteSpace(entity.Surname) && !String.IsNullOrWhiteSpace(entity.Mail) && !String.IsNullOrWhiteSpace(entity.Password) && entity.RoleId > 0)
+            if (user != null && entity.RoleId > 0)
             {
-                user.Name = entity.Name;
-                user.Surname = entity.Surname;
-                user.Mail = entity.Mail;
-                user.Password = entity.Password;
-                user.RoleId = entity.RoleId;
-                user.Biography = entity.Biography;
-                user.UserName = entity.UserName;
-                user.Photo=entity.Photo;
+                user.Name = !String.IsNullOrWhiteSpace(entity.Name)?entity.Name:user.Name;
+                user.Surname = !String.IsNullOrWhiteSpace(entity.Surname) ? entity.Surname : user.Surname;
+                user.Mail = !String.IsNullOrWhiteSpace(entity.Mail) ? entity.Mail : user.Mail;
+                user.Password = !String.IsNullOrWhiteSpace(entity.Password) ? entity.Password : user.Password;
+                user.Biography = !String.IsNullOrWhiteSpace(entity.Biography) ? entity.Biography : user.Biography;
+                user.UserName = !String.IsNullOrWhiteSpace(entity.UserName) ? entity.UserName : user.UserName;
+                user.Photo = !String.IsNullOrWhiteSpace(entity.Photo) ? entity.Photo : user.Photo;
+                
                 db.SaveChanges();
                 return true;
             }

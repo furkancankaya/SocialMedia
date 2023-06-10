@@ -16,8 +16,8 @@ namespace SocialMedia.Models
         public string Password { get; set; }
         public string Biography { get; set; }
         public string Photo { get; set; }
-        public bool IsStatus { get; set; }
-        public int RoleId { get; set; }
+        public bool IsStatus { get; set; } = true;
+        public int RoleId { get; set; } = 2;
         public Role Role { get; set; }
         public List<Content> Contents { get; set; }
         public List<ContentComment> ContentComments { get; set; }

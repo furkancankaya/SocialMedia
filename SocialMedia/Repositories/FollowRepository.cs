@@ -37,8 +37,10 @@ namespace SocialMedia.Repositories
         }
         public List<User> GetAllMyFollowers(int userId)
         {
+
+            
             var  followersIds = (from u in db.User
-                               join f in db.Follow on u.Id equals f.Id
+                               join f in db.Follow on u.Id equals f.FollowedUserId
                                where u.Id == userId
                                select new
                                {
@@ -48,16 +50,33 @@ namespace SocialMedia.Repositories
             List <User> followers = new List<User>();
             foreach (var f in followersIds)
             {
-                int followersId = Convert.ToInt32(f);
+                int followersId = Convert.ToInt32(f.FollowersIds);
                 followers.Add(userRepository.GetById(followersId));
             }
 
             return followers;
+            
+
+            
         }
-        public List<Follow> GetAllMyFollowed(int userId)
+        public List<User> GetAllMyFollowed(int userId)
         {
-            var data = db.Follow.Where(x => x.FollowedUserId == userId).ToList();
-            return data;
+            var followedsIds = (from u in db.User
+                                join f in db.Follow on u.Id equals f.FollowerUserId
+                                where u.Id == userId
+                                select new
+                                {
+                                    FollowedsIds = f.FollowedUserId
+                                }).ToList();
+
+            List<User> followeds = new List<User>();
+            foreach (var f in followedsIds)
+            {
+                int followedsId = Convert.ToInt32(f.FollowedsIds);
+                followeds.Add(userRepository.GetById(followedsId));
+            }
+
+            return followeds;
         }
         public Follow GetById(int id)
         {
