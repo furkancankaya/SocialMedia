@@ -16,10 +16,11 @@
                 <div class="card-body">
                     <h5 class="card-title">@Model.User.UserName</h5>
                     <p class="card-text">@Model.User.Biography</p>
-                    <a href="@Url.Action("ProfileEdit", "HomePage")" class="btn btn-primary">Profile Düzenle</a>
+                    <a href="@Url.Action("ProfileEdit", "HomePage")" class="btn btn-primary">Profil Düzenle</a>
                     <a href="@Url.Action("Friends", "HomePage")" class="btn btn-primary">Arkadaş: @Model.CountFollowers</a>
                 </div>
             </div>
+            <a href="@Url.Action("AddContent", "HomePage")" class="btn btn-primary">İçerik Paylaş</a>
         </div>
         <div class="col-8">
             @foreach (Content content in Model.Contents)
@@ -29,8 +30,9 @@
                     <div class="card-body">
                         <h5 class="card-title">@content.Title</h5>
                         <p class="card-text">@content.ContentDescription</p>
-                        <a href="#" class="btn btn-primary">Profile Git</a>
+                        <a href="#" class="btn btn-primary">Beğeni: </a> <a href="#" class="btn btn-primary">Yorum yap</a>
                     </div>
+                    
                 </div>
             }
         </div>

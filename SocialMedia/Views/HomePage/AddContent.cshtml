@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "AddContent";
+}
+
+<h2>AddContent</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group mb-4">
+        <label for="Type">İçerik Tipi</label>
+        <input class="form-control" type="text" name="Type" id="Type" placeholder="İçerik Tipi" required />
+
+        <label for="Title">Başlık</label>
+        <input class="form-control" type="text" name="Title" id="Title" placeholder="Başlık" required />
+
+        <label for="ContentDescription">İçerik Açıklaması</label>
+        <input class="form-control" type="text" name="ContentDescription" id="ContentDescription" placeholder="İçerik Açıklaması" required />
+
+    </div>
+    <button type="submit" class="btn btn-primary">Paylaş</button>
+    <span>@ViewBag.Message</span>
+</form>

@@ -10,6 +10,7 @@
 
 <div class="container">
     <div class="row">
+        <a href="@Url.Action("FindFriends", "HomePage")" class="btn btn-primary">Arkadaş Bul </a>
         <div class="col-6">
             <table class="table">
                 <thead>
@@ -21,9 +22,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for (int i = 1; i < (Model.Followeds.Count +1); i++)
+                    @for (int i = 1; i < (Model.Followeds.Count + 1); i++)
                     {
-                        var followed = Model.Followeds[i-1];
+                        var followed = Model.Followeds[i - 1];
                         <tr>
                             <th scope="row">@i</th>
                             <td>@followed.UserName</td>
@@ -47,7 +48,7 @@
                 <tbody>
                     @for (int i = 1; i < (Model.Followers.Count + 1); i++)
                     {
-                        var follower = Model.Followers[i-1];
+                        var follower = Model.Followers[i - 1];
                         <tr>
                             <th scope="row">@i</th>
                             <td>@follower.UserName</td>

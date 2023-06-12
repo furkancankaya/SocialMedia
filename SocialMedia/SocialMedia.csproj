@@ -127,6 +127,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Models\ContentViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HomePageController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -159,7 +160,7 @@
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ContentComment.cs" />
+    <Compile Include="Repositories\ContentCommentRepository.cs" />
     <Compile Include="Repositories\ContentLikeRepository.cs" />
     <Compile Include="Repositories\ContentRespository.cs" />
     <Compile Include="Repositories\FollowRepository.cs" />
@@ -227,6 +228,8 @@
     <Content Include="Views\HomePage\Profile.cshtml" />
     <Content Include="Views\HomePage\ProfileEdit.cshtml" />
     <Content Include="Views\HomePage\Friends.cshtml" />
+    <Content Include="Views\HomePage\AddContent.cshtml" />
+    <Content Include="Views\HomePage\FindFriends.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -21,6 +21,7 @@
                     <li>@Html.ActionLink("Giriş", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Hakkında", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Kişi", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Çıkış Yap", "Logout", "Users", new { area = "" }, new { @class = "nav-link" })</li>
                 </ul>
             </div>
         </div>
@@ -29,7 +30,9 @@
         @RenderBody()
         <hr />
         <footer>
-            <p style="text-align:center">&copy; @DateTime.Now.Year - ASP.NET Sosyalog by FC</p>
+            <p style="text-align: center;  left: 0; bottom: 0; width: 100%; padding: 10px; ">&copy; @DateTime.Now.Year - ASP.NET Sosyalog by FC</p>
+
+
         </footer>
     </div>
 

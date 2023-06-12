@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using SocialMedia.Models;
 using StockManagementProject.DataAccessLayer;
 using StockManagementProject.Repositories;
@@ -43,6 +44,15 @@ namespace SocialMedia.Controllers
             }
 
            
+        }
+
+        //--------------------------------------------------------------------------------
+        //----------------------------------------LogOut----------------------------
+        public ActionResult Logout()
+        {
+
+            Session.Clear();
+            return RedirectToAction("Login","Users");
         }
 
         //--------------------------------------------------------------------------------

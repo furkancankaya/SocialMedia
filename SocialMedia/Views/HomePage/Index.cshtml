@@ -1,4 +1,5 @@
-﻿@using SocialMedia.Models
+﻿
+@using SocialMedia.Models
 @model dynamic
 
 @{
@@ -22,20 +23,87 @@
                     <a href="@Url.Action("Profile", "HomePage")" class="btn btn-primary">Profile Git</a>
                 </div>
             </div>
+            <a href="@Url.Action("AddContent", "HomePage")" class="btn btn-primary">İçerik Paylaş</a>
         </div>
         <div class="col-8">
-            @foreach (Content content in Model.Contents)
+
+            @{var Commentid = 1;}
+            @foreach (ContentViewModel content in Model.ContentViewModel)
             {
+
                 <div class="card mb-3">
-                   
+
                     <div class="card-body">
-                        <h5 class="card-title">@content.Title</h5>
-                        <p class="card-text">@content.ContentDescription</p>
-                        <a href="#" class="btn btn-primary">Profile Git</a>
+                        <h5 class="card-title">@content.Content.Title</h5>
+                        <p class="card-text">@content.Content.ContentDescription</p>
+
+                        <a id="likeCount-@content.Content.Id" href="#" class="btn btn-primary">Beğeni: @content.LikeCount</a> <a id="commentCount" href="#" class="btn btn-primary">Yorum: @content.ContentComment.Count</a>
+                        <button id="likeButton-@content.Content.Id" type="button" class="btn btn-success" onclick="increaseLike(@content.Content.Id)">Beğen</button>
+                        @*<input id="contentComment-@Commentid " type="text" name="Comment" id="Comment" placeholder="Yorumunuz..." /> <button type="button" class="btn btn-primary" onclick="addComment(@content.Content.Id, @Commentid)">Yorum Yap</button>*@
+                        @foreach (ContentComment comment in content.ContentComment)
+                        {
+
+                            <p>@comment.Comment   date: @comment.CreateDate </p>
+                        }
                     </div>
+
                 </div>
+
             }
         </div>
     </div>
 </div>
+
+<script>
+    function increaseLike(contentId) {
+        // AJAX isteği göndererek beğeni sayısını artırın ve güncel değeri sayfada gösterin
+        var likeButton = $('#likeButton-' + contentId);
+        $.ajax({
+            url: '@Url.Action("LikeContent", "HomePage")',
+            type: 'POST',
+            data: { ContentId: Number(contentId) },
+            success: function (response) {
+                // İsteğin başarılı olması durumunda sayfada beğeni sayısını güncelleyin
+                if (likeButton.hasClass('btn-success')) {
+                    likeButton.removeClass('btn-success');
+                    likeButton.addClass('btn-danger');
+                    likeButton.text('Beğenildi');
+                } else {
+                    likeButton.removeClass('btn-danger');
+                    likeButton.addClass('btn-success');
+                    likeButton.text('Beğen');
+                }
+                $('#likeCount-' + contentId).text("Beğeni: " +response);
+            },
+            error: function () {
+                // İsteğin hata vermesi durumunda hata mesajı gösterebilirsiniz
+                alert('Beğeni artırma işlemi sırasında bir hata oluştu.');
+            }
+        });
+    }
+    @*function addComment(contentId, commentId) {
+
+        alert($('#contentComment-' + commentId).value())
+        $.ajax({
+            url: '@Url.Action("AddComment", "HomePage")',
+            type: 'POST',
+            data: {
+                ContentId: Number(contentId),
+                Comment: $('#contentComment-' + commentId).val(),
+            },
+            success: function (response) {
+               
+                @Commentid++
+                    $('#contentComment-' + commentId).val("");
+                    $('#commentCount').text("Yorum: " + response);
+            },
+            error: function () {
+                
+                alert('Beğeni artırma işlemi sırasında bir hata oluştu.');
+            }
+        });
+    };*@
+
+
+</script>
 

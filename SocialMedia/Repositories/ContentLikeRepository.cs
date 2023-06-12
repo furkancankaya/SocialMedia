@@ -34,7 +34,12 @@ namespace SocialMedia.Repositories
         }
         public List<ContentLike> GetAllById(int id)
         {
-            var data = db.ContentLike.Where(x => x.Id == id).ToList();
+            var data = db.ContentLike.Where(x => x.ContentId == id).ToList();
+            return data;
+        }
+        public int GetLikeCountByContentId(int id)
+        {
+            var data = db.ContentLike.Where(x => x.ContentId == id).Count();
             return data;
         }
         public ContentLike GetById(int id)
@@ -47,6 +52,19 @@ namespace SocialMedia.Repositories
             db.ContentLike.AddOrUpdate(entity);
             db.SaveChanges();
             return true;
+        }
+
+        public bool CheckLike(int userid, int conentid)
+        {
+            var status = db.ContentLike.Any(x => (x.OwnerLikeId == userid && x.ContentId == conentid));
+            return status;
+            
+        }
+
+        public ContentLike GetByContentAndOwner(int userid, int conentid)
+        {
+            var like = db.ContentLike.FirstOrDefault(x => (x.OwnerLikeId == userid && x.ContentId == conentid));
+            return like;
         }
     }
 }
