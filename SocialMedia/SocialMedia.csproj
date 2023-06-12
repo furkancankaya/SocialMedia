@@ -127,6 +127,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Migrations\202306122025416_loginhatasi.cs" />
+    <Compile Include="Migrations\202306122025416_loginhatasi.designer.cs">
+      <DependentUpon>202306122025416_loginhatasi.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ContentViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HomePageController.cs" />
@@ -156,6 +160,7 @@
     <Compile Include="Models\ContentComment.cs" />
     <Compile Include="Models\ContentLike.cs" />
     <Compile Include="DataAccessLayer\DataContext.cs" />
+    <Compile Include="Models\FinndFriends.cs" />
     <Compile Include="Models\Follow.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\User.cs" />
@@ -183,6 +188,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Images\UserProfile\default-user.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -230,9 +236,12 @@
     <Content Include="Views\HomePage\Friends.cshtml" />
     <Content Include="Views\HomePage\AddContent.cshtml" />
     <Content Include="Views\HomePage\FindFriends.cshtml" />
+    <Content Include="Views\HomePage\FindedFriends.cshtml" />
+    <Content Include="Views\HomePage\UpdateContent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Images\Contents\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -273,6 +282,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202306051804145_veriekleme.resx">
       <DependentUpon>202306051804145_veriekleme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202306122025416_loginhatasi.resx">
+      <DependentUpon>202306122025416_loginhatasi.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

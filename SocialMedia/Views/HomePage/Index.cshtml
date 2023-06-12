@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-4">
             <div class="card">
-                <img class="card-img-top" src="@Model.User.Photo" alt="Card image cap">
+                <img class="card-img-top" src="~/Content/Images/UserProfile/@Model.User.Photo" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">@Model.User.UserName</h5>
                     <p class="card-text">@Model.User.Biography</p>
@@ -37,8 +37,19 @@
                         <h5 class="card-title">@content.Content.Title</h5>
                         <p class="card-text">@content.Content.ContentDescription</p>
 
-                        <a id="likeCount-@content.Content.Id" href="#" class="btn btn-primary">Beğeni: @content.LikeCount</a> <a id="commentCount" href="#" class="btn btn-primary">Yorum: @content.ContentComment.Count</a>
-                        <button id="likeButton-@content.Content.Id" type="button" class="btn btn-success" onclick="increaseLike(@content.Content.Id)">Beğen</button>
+                        <a id="likeCount-@content.Content.Id" href="#" class="btn btn-primary">Beğeni: @content.Likes.Count</a> <a id="commentCount" href="#" class="btn btn-primary">Yorum: @content.ContentComment.Count</a>
+                        @*<button id="likeButton-@content.Content.Id" type="button" class="btn btn-success" onclick="increaseLike(@content.Content.Id)">Beğen</button>*@
+                        @{  
+                            if (content.Likes.FindIndex( item => item.OwnerLikeId == @Model.User.Id) >= 0)
+                            {
+                                <button id="likeButton-@content.Content.Id" type="button" class="btn btn-danger" onclick="increaseLike(@content.Content.Id)">Beğenildi @{content.Likes.FindIndex(item => item.OwnerLikeId == @Model.User.Id);}</button>
+                            }
+                            else
+                            {
+                                
+                                <button id="likeButton-@content.Content.Id" type="button" class="btn btn-success" onclick="increaseLike(@content.Content.Id)">Beğen @{content.Likes.FindIndex(item => item.OwnerLikeId == @Model.User.Id);}</button>
+                            }
+                        }
                         @*<input id="contentComment-@Commentid " type="text" name="Comment" id="Comment" placeholder="Yorumunuz..." /> <button type="button" class="btn btn-primary" onclick="addComment(@content.Content.Id, @Commentid)">Yorum Yap</button>*@
                         @foreach (ContentComment comment in content.ContentComment)
                         {

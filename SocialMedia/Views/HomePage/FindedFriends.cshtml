@@ -1,0 +1,90 @@
+﻿@using SocialMedia.Models
+@model dynamic
+@{
+    ViewBag.Title = "FindedFriends";
+}
+
+<h2>FindedFriends</h2>
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-10">
+            <a href="@Url.Action("FindFriends", "HomePage")" class="btn btn-primary">Arkadaş Bul </a>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Toplam: @Model.Friends.Count</th>
+                        <th scope="col">Kullanıcı Adı</th>
+                        <th scope="col">E-Mail</th>
+                        <th scope="col">İsim</th>
+                        <th scope="col">Soyisim</th>
+                        <th scope="col">Setting</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 1; i < (Model.Friends.Count + 1); i++)
+                    {
+                        User friend = Model.Friends[i - 1];
+                        <tr>
+                            <th scope="row">@i</th>
+                            <td>@friend.UserName</td>
+                            <td>@friend.Mail</td>
+                            <td>@friend.Name</td>
+                            <td>@friend.Surname</td>
+                            @{
+                                        //if (Model.Followed.Contains(@friend))
+                                        // var isFollowed = Model.Followed.Any(x => x.Id == friend.Id);
+                                        var status = ((List<User>)Model.Followed).Where(x => x.Id == friend.Id).Count();
+                                        if (status > 0)
+                                        {
+                                    <td>
+
+                                        <button id="addFriend-@friend.Id" type="button" class="btn btn-danger" onclick="addFriend(@friend.Id)">Takip </button>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <button id="addFriend-@friend.Id" type="button" class="btn btn-success" onclick="addFriend(@friend.Id)">Takip Et </button>
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+       
+    </div>
+</div>
+
+<script>
+    function addFriend(friendId) {
+        // AJAX isteği göndererek beğeni sayısını artırın ve güncel değeri sayfada gösterin
+        var addButton = $('#addFriend-' + friendId);
+        $.ajax({
+            url: '@Url.Action("AddFriend", "HomePage")',
+            type: 'POST',
+            data: { FollowedUserId: Number(friendId) },
+            success: function (response) {
+                // İsteğin başarılı olması durumunda sayfada beğeni sayısını güncelleyin
+                if (addButton.hasClass('btn-success')) {
+                    addButton.removeClass('btn-success');
+                    addButton.addClass('btn-danger');
+                    addButton.text('Takip');
+                } else {
+                    addButton.removeClass('btn-danger');
+                    addButton.addClass('btn-success');
+                    addButton.text('Takip Et');
+                }
+                
+            },
+            error: function () {
+                // İsteğin hata vermesi durumunda hata mesajı gösterebilirsiniz
+                alert('Beğeni artırma işlemi sırasında bir hata oluştu.');
+            }
+        });
+    }
+</script>

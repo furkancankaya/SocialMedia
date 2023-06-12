@@ -78,6 +78,11 @@ namespace SocialMedia.Repositories
 
             return followeds;
         }
+
+        public Follow GetByFollwerAndFollowedId(int followerid, int followedid)
+        {
+            return db.Follow.FirstOrDefault(x=>(x.FollowerUserId==followerid && x.FollowedUserId == followedid));
+        }
         public Follow GetById(int id)
         {
             return db.Follow.Find(id);

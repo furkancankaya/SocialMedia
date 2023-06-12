@@ -9,21 +9,22 @@
 <h2>FindFriends</h2>
 
 <div class="container">
+    <a href="@Url.Action("Friends", "HomePage")" class="btn btn-primary">Arkadaşlar</a>
     <form method="post" enctype="multipart/form-data">
 
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="UserName" id="Nick" value="option1">
+            <input class="form-check-input" type="radio" name="FindOption" id="Nick" value="Nick">
             <label class="form-check-label" for="Nick">Kullanıcı Adı</label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="Mail" id="EMail" value="option2">
+            <input class="form-check-input" type="radio" name="FindOption" id="EMail" value="EMail">
             <label class="form-check-label" for="EMail">E-Mail</label>
         </div>
 
 
         <div class="mb-3">
-            <label for="Find" class="form-label"></label>
-            <input type="text" class="form-control" id="Find" name="Find">
+            <label for="FindText" class="form-label"></label>
+            <input type="text" class="form-control" id="FindText" name="FindText">
         </div>
         <button type="submit" class="btn btn-primary">Ara</button>
     </form>

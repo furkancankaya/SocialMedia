@@ -1,0 +1,24 @@
+﻿@using SocialMedia.Models
+@model Content
+@{
+    ViewBag.Title = "UpdateContent";
+}
+
+<h2>UpdateContent</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group mb-4">
+
+
+        <label for="Title">Başlık</label>
+        <input class="form-control" type="text" name="Title" id="Title" placeholder="Başlık" required value="@Model.Title"/>
+
+        <label for="ContentDescription">İçerik Açıklaması</label>
+        <input class="form-control" type="text" name="ContentDescription" id="ContentDescription" placeholder="İçerik Açıklaması" required value="@Model.ContentDescription"/>
+
+        <label for="ObjectPath">İçerik Nesnesi</label>
+        <input class="form-control" type="file" name="ObjectPath" id="ObjectPath" placeholder="Fotoğraf/Video Ekleyebilirsiniz" accept=".png, .jpeg, .jpg, .mp4" value="@Model.ObjectPath"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Paylaş</button>
+    <span>@ViewBag.Message</span>
+</form>

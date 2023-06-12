@@ -85,5 +85,17 @@ namespace StockManagementProject.Repositories
             }
             return false;
         }
+
+        public List<User> GetAllByNick(string nick)
+        {
+            List<User> user = db.User.Where(x => x.UserName == nick && x.IsStatus == true).ToList();
+            return user;
+        }
+
+        public List<User> GetAllByMail(string mail)
+        {
+            List<User> user = db.User.Where(x => x.Mail == mail && x.IsStatus == true).ToList();
+            return user;
+        }
     }
 }

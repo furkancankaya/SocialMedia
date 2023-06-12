@@ -39,6 +39,11 @@ namespace SocialMedia.Repositories
             var data = db.Content.Where(x => x.UserId == userId).ToList();
             return data;
         }
+        public Content GetAllById(int id)
+        {
+            var data = db.Content.Where(x => x.Id == id).FirstOrDefault();
+            return data;
+        }
         public List<Content> GetAllMyContents(int userId)
         {
            

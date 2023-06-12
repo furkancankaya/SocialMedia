@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -65,10 +66,25 @@ namespace SocialMedia.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult SignUp(User user)
+        public ActionResult SignUp(User user, HttpPostedFileBase Photo)
         {
             if (user != null)
             {
+                if (Photo != null && Photo.ContentLength > 0 && (Photo.ContentType == "image/png" || Photo.ContentType == "image/jpeg" || Photo.ContentType == "image/jpg"))
+                {
+                    string photoPath = "";
+                    string photoName = "";
+
+                    photoName = Guid.NewGuid().ToString() + Path.GetFileName(Photo.FileName);
+                    photoPath = Path.Combine(Server.MapPath("~/Content/Images/UserProfile"), photoName);
+                    Photo.SaveAs(photoPath);
+                    user.Photo = photoName;
+                }
+                else
+                {
+                    user.Photo = "default-user.png";
+                }
+
                 bool status = repositoryUser.Add(user);
                 if (status == true)
                 {

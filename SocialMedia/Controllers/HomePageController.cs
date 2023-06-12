@@ -3,13 +3,14 @@ using SocialMedia.Models;
 using SocialMedia.Repositories;
 using StockManagementProject.Repositories;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Web;
 using System.Web.Mvc;
-
 using System.Xml.Linq;
 
 namespace SocialMedia.Controllers
@@ -49,7 +50,7 @@ namespace SocialMedia.Controllers
             List<ContentViewModel> contentViewModels = new List<ContentViewModel>();
             foreach (Content content in contents)
             {
-                int countLikes = contentLikeRepository.GetAllById(content.Id).Count;
+                List<ContentLike> countLikes = contentLikeRepository.GetAllById(content.Id);
 
                 List<ContentComment> comments = contentCommentRepository.GetAllById(content.Id);
 
@@ -57,7 +58,7 @@ namespace SocialMedia.Controllers
                 ContentViewModel contentViewModel = new ContentViewModel
                 {
                     Content = content,
-                    LikeCount = countLikes,
+                    Likes = countLikes,
                     ContentComment = comments
                 };
 
@@ -91,17 +92,33 @@ namespace SocialMedia.Controllers
            
 
             User user = userRepository.GetById(id);
-            List<Content> contents = contentRespository.GetAllMyContents(id);  //takip ettiklerimin contentleri
+            List<Content> contents = contentRespository.GetAllMyContents(id);  //contentlerim
             List<User> followers = followRepository.GetAllMyFollowers(id);  //userın followerları
             int countFollowers = followers.Count();
+            List<ContentViewModel> contentViewModels = new List<ContentViewModel>();
+            foreach (Content content in contents)
+            {
+                List<ContentLike> countLikes = contentLikeRepository.GetAllById(content.Id);
 
-            
-            
+                List<ContentComment> comments = contentCommentRepository.GetAllById(content.Id);
 
-     
+
+                ContentViewModel contentViewModel = new ContentViewModel
+                {
+                    Content = content,
+                    Likes = countLikes,
+                    ContentComment = comments
+                };
+
+                contentViewModels.Add(contentViewModel);
+            }
+
+
+
+
             dynamic mymodel = new ExpandoObject();
             mymodel.User = user;
-            mymodel.Contents = contents;
+            mymodel.ContentViewModel = contentViewModels;
             mymodel.CountFollowers = countFollowers;
             return View(mymodel);
         }
@@ -196,7 +213,7 @@ namespace SocialMedia.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddContent(Content content)
+        public ActionResult AddContent(Content content, HttpPostedFileBase ObjectPath)
         {
             if (Session["id"] == null)
             {
@@ -210,6 +227,23 @@ namespace SocialMedia.Controllers
 
             if (content != null)
             {
+                if (ObjectPath != null && ObjectPath.ContentLength > 0 && (ObjectPath.ContentType == "image/png" || ObjectPath.ContentType == "image/jpeg" || ObjectPath.ContentType == "image/jpg" || ObjectPath.ContentType == "video/mp4"))
+                {
+                    string objectPath = "";
+                    string objectName = "";
+
+                    objectName = Guid.NewGuid().ToString() + Path.GetFileName(ObjectPath.FileName);
+                    objectPath = Path.Combine(Server.MapPath("~/Content/Images/Contents"), objectName);
+                    ObjectPath.SaveAs(objectPath);
+                    content.ObjectPath = objectName;
+                    content.Type = "File";
+                }
+                else
+                {
+                    content.Type = "Text";
+                }
+                
+
                 content.UserId = id;
                 bool status = contentRespository.Add(content);
                 if (status == true)
@@ -226,10 +260,106 @@ namespace SocialMedia.Controllers
             return View();
         }
         //--------------------------------------------------------------------------------
+        //------------------------------İçerik Silme------------------------------------
+        [HttpPost]
+        public JsonResult DeleteContent(Content content)
+        {
 
 
 
-        //--------------------------------İçerik ekleme----------------------------------
+            bool status = contentRespository.Delete(content.Id);
+
+
+            if (status)
+            {
+                return Json("Paylaşım Silindi");
+            }
+            else
+            {
+                return Json("Paylaşım Silinemedi!");
+            }
+
+
+        }
+
+
+        //--------------------------------------------------------------------------------
+        //------------------------------İçerik Güncelleme------------------------------------
+        [HttpGet]
+        public ActionResult UpdateContent(int id)
+        {
+            if (Session["id"] == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+           
+
+            int contentId = Convert.ToInt32(id);
+
+            Content content = contentRespository.GetAllById(contentId);
+
+
+            return View(content);
+
+        }
+        [HttpPost]
+        public ActionResult UpdateContent(Content content, HttpPostedFileBase ObjectPath)
+        {
+            if (content != null)
+            {
+
+                if (Session["id"] == null)
+                {
+                    return RedirectToAction("Login", "Users");
+                }
+                int id = Convert.ToInt32(Session["id"]);
+
+                
+
+
+
+
+                if (content != null)
+                {
+                    if (ObjectPath != null && ObjectPath.ContentLength > 0 && (ObjectPath.ContentType == "image/png" || ObjectPath.ContentType == "image/jpeg" || ObjectPath.ContentType == "image/jpg" || ObjectPath.ContentType == "video/mp4"))
+                    {
+                        string objectPath = "";
+                        string objectName = "";
+
+                        objectName = Guid.NewGuid().ToString() + Path.GetFileName(ObjectPath.FileName);
+                        objectPath = Path.Combine(Server.MapPath("~/Content/Images/Contents"), objectName);
+                        ObjectPath.SaveAs(objectPath);
+                        content.ObjectPath = objectName;
+                        content.Type = "File";
+                    }
+                    else
+                    {
+                        content.Type = "Text";
+                    }
+
+
+                    content.UserId = id;
+                    bool status = contentRespository.Update(content);
+                    if (status == true)
+                    {
+                        ViewBag.Message = "Güncelleme başarılı.";
+                        return RedirectToAction("Profile", "HomePage");
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Güncelleme başarısız!";
+                    }
+                }
+
+               
+            }
+            return View();
+        }
+
+
+        //--------------------------------------------------------------------------------
+
+        //--------------------------------Arkadaş Bulma----------------------------------
         [HttpGet]
         public ActionResult FindFriends()
         { 
@@ -237,16 +367,76 @@ namespace SocialMedia.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult FindFriends(String friend)
+        public ActionResult FindFriends(FinndFriends friends)
+        {
+            if (friends.FindOption == "Nick")
+            {
+                
+                List<User> users = userRepository.GetAllByNick(friends.FindText);  //userın followerları
+                Session["findedUsers"] = users;
+                return RedirectToAction("FindedFriends", "HomePage", new { data = users });
+
+            }
+            else
+            {
+                List<User> users = userRepository.GetAllByMail(friends.FindText);
+                Session["findedUsers"] = users;
+                return RedirectToAction("FindedFriends", "HomePage", new { data = users });
+            }
+
+            
+        }
+
+        
+        public ActionResult FindedFriends()
+        {
+            if (Session["id"] == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+            int id = Convert.ToInt32(Session["id"]);
+            List<User> takipEttiklerim = followRepository.GetAllMyFollowed(id);
+
+
+            dynamic mymodel = new ExpandoObject();
+            mymodel.Followed = takipEttiklerim;
+            mymodel.Friends = Session["findedUsers"];
+            
+            return View(mymodel); 
+        }
+
+        [HttpPost]
+        public JsonResult AddFriend(Follow follow)
         {
 
+            int id = Convert.ToInt32(Session["id"]);  //giriş yapan userın idsi
 
-            return View();
+            Follow userOfFollow = followRepository.GetByFollwerAndFollowedId(id, follow.FollowedUserId );
+           
+
+            if (userOfFollow == null)
+            {
+                Follow newFollow = new Follow
+                {
+                    FollowedUserId = follow.FollowedUserId,
+                    FollowerUserId = id
+                };
+                followRepository.Add(newFollow);
+            }
+            else
+            {
+                followRepository.Delete(userOfFollow.Id);
+            }
+
+
+            return Json(0);
         }
+
+
 
         //--------------------------------------------------------------------------------
 
-        
+
         //------------------------------Beğeni ALma---------------------------------
 
         [HttpPost]

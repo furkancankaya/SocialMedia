@@ -11,16 +11,16 @@
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
         <div class="container">
-            @Html.ActionLink("Sosyalog", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("Sosyalog", "Index", "HomePage", new { area = "" }, new { @class = "navbar-brand" })
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Gezintiyi aç/kapat" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Giriş", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Hakkında", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Kişi", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Ana Sayfa", "Index", "HomePage", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Profil", "Profile", "HomePage", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Arkadaşlar", "Friends", "HomePage", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Çıkış Yap", "Logout", "Users", new { area = "" }, new { @class = "nav-link" })</li>
                 </ul>
             </div>

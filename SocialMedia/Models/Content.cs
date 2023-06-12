@@ -12,6 +12,7 @@ namespace SocialMedia.Models
         public User User { get; set; }
         public string Type { get; set; }
         public string Title { get; set; }
+        public string ObjectPath { get; set; }
         public string ContentDescription { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public List<ContentComment> ContentComments { get; set; }
