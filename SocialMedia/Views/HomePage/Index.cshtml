@@ -37,28 +37,53 @@
                         <h5 class="card-title">@content.Content.Title</h5>
                         <p class="card-text">@content.Content.ContentDescription</p>
 
-                        <a id="likeCount-@content.Content.Id" href="#" class="btn btn-primary">Beğeni: @content.Likes.Count</a> <a id="commentCount" href="#" class="btn btn-primary">Yorum: @content.ContentComment.Count</a>
-                        @*<button id="likeButton-@content.Content.Id" type="button" class="btn btn-success" onclick="increaseLike(@content.Content.Id)">Beğen</button>*@
-                        @{  
-                            if (content.Likes.FindIndex( item => item.OwnerLikeId == @Model.User.Id) >= 0)
+                        <a id="likeCount-@content.Content.Id" href="#" class="btn btn-primary">Beğeniler: @content.Likes.Count</a>
+
+                        @{
+                            if (content.Likes.FindIndex(item => item.OwnerLikeId == @Model.User.Id) >= 0)
                             {
                                 <button id="likeButton-@content.Content.Id" type="button" class="btn btn-danger" onclick="increaseLike(@content.Content.Id)">Beğenildi @{content.Likes.FindIndex(item => item.OwnerLikeId == @Model.User.Id);}</button>
                             }
                             else
                             {
-                                
+
                                 <button id="likeButton-@content.Content.Id" type="button" class="btn btn-success" onclick="increaseLike(@content.Content.Id)">Beğen @{content.Likes.FindIndex(item => item.OwnerLikeId == @Model.User.Id);}</button>
                             }
                         }
-                        @*<input id="contentComment-@Commentid " type="text" name="Comment" id="Comment" placeholder="Yorumunuz..." /> <button type="button" class="btn btn-primary" onclick="addComment(@content.Content.Id, @Commentid)">Yorum Yap</button>*@
-                        @foreach (ContentComment comment in content.ContentComment)
-                        {
 
-                            <p>@comment.Comment   date: @comment.CreateDate </p>
-                        }
+
+                    <form id="commentForm-@content.Content.Id" onsubmit="addComment(event, @content.Content.Id)">
+                        <input type="text" name="Comment" placeholder="Yorumunuz..." required />
+                        <button type="submit" class="btn btn-primary">Yorum Yap</button>
+                    </form>
+                        
+                        
+                        
+                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                        Yorumlar: @content.ContentComment.Count
+                                    </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                                    <div class="accordion-body">
+                                        @foreach (ContentComment comment in content.ContentComment)
+                                        {
+
+                                            <p><strong>@comment.OwnerId: </strong> @comment.Comment   date: @comment.CreateDate  @if(@comment.OwnerId==@Model.User.Id) { <button class="btn btn-warning" >Düzenle</button><button class="btn btn-danger" onclick="deleteComment(@comment.Id)">Sil</button>;}</p>
+                                             
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
                     </div>
 
-                </div>
+                    </div>
 
             }
         </div>
@@ -92,6 +117,48 @@
             }
         });
     }
+
+    function addComment(event, contentId) {
+        event.preventDefault(); // Form submit işlemini engellemek için
+
+        var commentForm = $('#commentForm-' + contentId);
+        var commentInput = commentForm.find('input[name=Comment]');
+
+        $.ajax({
+            url: '@Url.Action("AddComment", "HomePage")',
+            type: 'POST',
+            data: {
+                ContentId: contentId,
+                Comment: commentInput.val()
+            },
+            success: function (response) {
+                // İsteğin başarılı olması durumunda sayfayı yeniden yükle
+                location.reload();
+            },
+            error: function () {
+                alert('Yorum ekleme işlemi sırasında bir hata oluştu.');
+            }
+        });
+    }
+
+    function deleteComment(commentId) {
+        
+
+        $.ajax({
+            url: '@Url.Action("DeleteComment", "HomePage")',
+            type: 'POST',
+            data: {
+                Id: commentId,
+            },
+            success: function (response) {
+                // İsteğin başarılı olması durumunda sayfayı yeniden yükle
+                location.reload();
+            },
+            error: function () {
+                alert('Yorum silme işlemi sırasında bir hata oluştu.');
+            }
+        });
+    }
     @*function addComment(contentId, commentId) {
 
         alert($('#contentComment-' + commentId).value())
@@ -103,13 +170,13 @@
                 Comment: $('#contentComment-' + commentId).val(),
             },
             success: function (response) {
-               
+
                 @Commentid++
                     $('#contentComment-' + commentId).val("");
                     $('#commentCount').text("Yorum: " + response);
             },
             error: function () {
-                
+
                 alert('Beğeni artırma işlemi sırasında bir hata oluştu.');
             }
         });

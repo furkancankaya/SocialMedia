@@ -26,7 +26,7 @@
             @foreach (ContentViewModel content in Model.ContentViewModel)
             {
                 
-                <div class="card mb-2" id="content-@content.Content.Id">
+                <div class="card mb-3" id="content-@content.Content.Id">
                     @{
                         if (content.Content.Type == "File")
                         {
@@ -47,15 +47,42 @@
                 <div class="card-body">
                     <h3 class="card-title">@content.Content.Title</h3>
                     <p class="card-text">@content.Content.ContentDescription</p>
-                    <a id="likeCount-@content.Content.Id" href="#" class="btn btn-primary">Beğeni: @content.Likes.Count</a> <a id="commentCount" href="#" class="btn btn-primary">Yorum: @content.ContentComment.Count</a>
-                    <a href="@Url.Action("UpdateContent", "HomePage", new { id = @content.Content.Id })" class="btn btn-warning">Düzenle</a><button id="silButton-@content.Content.Id" type="button" class="btn btn-danger" onclick="deleteContent(@content.Content.Id)">Sil</button>
-                    
-                    @*<button id="updateButton-@content.Content.Id" type="button" class="btn btn-warning" onclick="updateContent(@content.Content.Id)">Düzenle</button>*@
-                    @foreach (ContentComment comment in content.ContentComment)
-                    {
+                    <a id="likeCount-@content.Content.Id" href="#" class="btn btn-primary">Beğeniler: @content.Likes.Count</a>
 
-                        <p>@comment.Comment   date: @comment.CreateDate </p>
-                    }
+                    <a href="@Url.Action("UpdateContent", "HomePage", new { id = @content.Content.Id })" class="btn btn-warning">Düzenle</a><button id="silButton-@content.Content.Id" type="button" class="btn btn-danger" onclick="deleteContent(@content.Content.Id)">Sil</button>
+
+
+
+
+                    <form id="commentForm-@content.Content.Id" onsubmit="addComment(event, @content.Content.Id)">
+                        <input type="text" name="Comment" placeholder="Yorumunuz..." required />
+                        <button type="submit" class="btn btn-primary">Yorum Yap</button>
+                    </form>
+
+
+
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                    Yorumlar: @content.ContentComment.Count
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                                <div class="accordion-body">
+                                    @foreach (ContentComment comment in content.ContentComment)
+                                    {
+
+                                        <p><strong>@comment.OwnerId: </strong> @comment.Comment   date: @comment.CreateDate  @if (@comment.OwnerId == @Model.User.Id)
+                                        {<span class="btn btn-warning">Düzenle</span><span class="btn btn-danger">Sil</span>;
+                                        }</p>
+
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 </div>
@@ -84,7 +111,28 @@
         });
     }
 
-    
+    function addComment(event, contentId) {
+        event.preventDefault(); // Form submit işlemini engellemek için
+
+        var commentForm = $('#commentForm-' + contentId);
+        var commentInput = commentForm.find('input[name=Comment]');
+
+        $.ajax({
+            url: '@Url.Action("AddComment", "HomePage")',
+            type: 'POST',
+            data: {
+                ContentId: contentId,
+                Comment: commentInput.val()
+            },
+            success: function (response) {
+                // İsteğin başarılı olması durumunda sayfayı yeniden yükle
+                location.reload();
+            },
+            error: function () {
+                alert('Yorum ekleme işlemi sırasında bir hata oluştu.');
+            }
+        });
+    }
 
 </script>
 

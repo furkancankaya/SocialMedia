@@ -474,11 +474,6 @@ namespace SocialMedia.Controllers
 
             int id = Convert.ToInt32(Session["id"]);  //giriş yapan userın idsi
 
-           
-            
-
-
-            
             
             ContentComment comment = new ContentComment
             {
@@ -494,5 +489,18 @@ namespace SocialMedia.Controllers
 
             return Json(contentCommentRepository.GetAllById(addComment.ContentId).Count);
         }
+
+        //------------------------------Yorum yapmak---------------------------------
+
+        [HttpPost]
+        public JsonResult DeleteComment(ContentComment deleteComment)
+        {
+    
+            contentCommentRepository.Delete(deleteComment.Id);   
+
+            return Json("");
+        }
+
+
     }
 }
