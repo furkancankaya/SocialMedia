@@ -35,7 +35,9 @@ namespace SocialMedia.Repositories
         }
         public List<ContentComment> GetAllByContentId(int contentId)
         {
-            var data = db.ContentComment.Where(x => x.ContentId == contentId).ToList();
+            var data = db.ContentComment
+                .Include("Owner")
+                .Where(x => x.ContentId == contentId).ToList();
             return data;
         }
         public ContentComment GetById(int id)

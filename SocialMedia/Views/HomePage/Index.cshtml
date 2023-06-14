@@ -70,9 +70,7 @@
                                     <div class="accordion-body">
                                         @foreach (ContentComment comment in content.ContentComment)
                                         {
-
-                                            <p><strong>@comment.OwnerId: </strong> @comment.Comment   date: @comment.CreateDate  @if(@comment.OwnerId==@Model.User.Id) { <button class="btn btn-warning" >Düzenle</button><button class="btn btn-danger" onclick="deleteComment(@comment.Id)">Sil</button>;}</p>
-                                             
+                                            <p><strong>@comment.Owner.UserName: </strong> @comment.Comment   date: @comment.CreateDate  @if(@comment.OwnerId==@Model.User.Id) { <button class="btn btn-warning" >Düzenle</button><button class="btn btn-danger" onclick="deleteComment(@comment.Id)">Sil</button>;}</p>  
                                         }
 
                                     </div>
