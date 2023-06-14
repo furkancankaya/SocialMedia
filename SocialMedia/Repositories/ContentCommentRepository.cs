@@ -33,9 +33,9 @@ namespace SocialMedia.Repositories
         {
             throw new NotImplementedException();
         }
-        public List<ContentComment> GetAllById(int id)
+        public List<ContentComment> GetAllByContentId(int contentId)
         {
-            var data = db.ContentComment.Where(x => x.ContentId == id).ToList();
+            var data = db.ContentComment.Where(x => x.ContentId == contentId).ToList();
             return data;
         }
         public ContentComment GetById(int id)

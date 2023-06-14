@@ -52,7 +52,7 @@ namespace SocialMedia.Controllers
             {
                 List<ContentLike> countLikes = contentLikeRepository.GetAllById(content.Id);
 
-                List<ContentComment> comments = contentCommentRepository.GetAllById(content.Id);
+                List<ContentComment> comments = contentCommentRepository.GetAllByContentId(content.Id);
 
 
                 ContentViewModel contentViewModel = new ContentViewModel
@@ -100,7 +100,7 @@ namespace SocialMedia.Controllers
             {
                 List<ContentLike> countLikes = contentLikeRepository.GetAllById(content.Id);
 
-                List<ContentComment> comments = contentCommentRepository.GetAllById(content.Id);
+                List<ContentComment> comments = contentCommentRepository.GetAllByContentId(content.Id);
 
 
                 ContentViewModel contentViewModel = new ContentViewModel
@@ -487,7 +487,7 @@ namespace SocialMedia.Controllers
             
 
 
-            return Json(contentCommentRepository.GetAllById(addComment.ContentId).Count);
+            return Json(contentCommentRepository.GetAllByContentId(addComment.ContentId).Count);
         }
 
         //------------------------------Yorum yapmak---------------------------------
