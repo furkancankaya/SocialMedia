@@ -490,6 +490,20 @@ namespace SocialMedia.Controllers
             return Json(contentCommentRepository.GetAllByContentId(addComment.ContentId).Count);
         }
 
+        [HttpPost]
+        public JsonResult UpdateComment(ContentComment updateComment)
+        {
+
+            int id = Convert.ToInt32(Session["id"]);  //giriş yapan userın idsi
+
+            ContentComment comment = contentCommentRepository.GetById(updateComment.Id);
+            comment.Comment = updateComment.Comment;
+
+            contentCommentRepository.Update(comment);
+
+            return Json(0);
+        }
+
         //------------------------------Yorum yapmak---------------------------------
 
         [HttpPost]
