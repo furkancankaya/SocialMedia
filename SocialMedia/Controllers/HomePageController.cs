@@ -526,5 +526,29 @@ namespace SocialMedia.Controllers
         }
 
 
+        
+        //-----------------------------Paylaşım Paylaşma---------------------------------
+
+        [HttpPost]
+        public JsonResult ShareContent(Content content)
+        {
+            int id = Convert.ToInt32(Session["id"]);  //giriş yapan userın idsi
+
+            Content sharedContent = contentRespository.GetById(content.Id);
+
+            Content newContent = new Content()
+            {
+                UserId = id,
+                Type = sharedContent.Type,
+                Title = sharedContent.Title,
+                ObjectPath = sharedContent.ObjectPath,
+                ContentDescription = sharedContent.ContentDescription,
+            };
+            contentRespository.Add(newContent);
+            
+
+            return Json("");
+        }
+
     }
 }

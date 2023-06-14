@@ -9,7 +9,7 @@
 
 
 
-<h2>ViewBag.Title</h2>
+
 
 
 <div class="container">
@@ -31,8 +31,24 @@
             @foreach (ContentViewModel content in Model.ContentViewModel)
             {
 
-                <div class="card mb-3">
+                <div class="card mb-3" id="content-@content.Content.Id">
+                    @{
+                        if (content.Content.Type == "File")
+                        {
 
+                            if (content.Content.ObjectPath.EndsWith(".mp4"))
+                            {
+                                <video class="card-img-top" controls>
+                                    <source src="~/Content/Images/Contents/@content.Content.ObjectPath" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            }
+                            else
+                            {
+                                <img class="card-img-top" src="~/Content/Images/Contents/@content.Content.ObjectPath" alt="Card image cap">
+                            }
+                        }
+                    }
                     <div class="card-body">
                         <h5 class="card-title">@content.Content.Title</h5>
                         <p class="card-text">@content.Content.ContentDescription</p>
@@ -51,14 +67,15 @@
                             }
                         }
 
+                        <button id="shareContent-@content.Content.Id" onclick="shareContent(@content.Content.Id)" type="button" class="btn btn-primary">Paylaş</button>
 
-                    <form id="commentForm-@content.Content.Id" onsubmit="addComment(event, @content.Content.Id)">
-                        <input type="text" name="Comment" placeholder="Yorumunuz..." required />
-                        <button type="submit" class="btn btn-primary">Yorum Yap</button>
-                    </form>
-                        
-                        
-                        
+                        <form id="commentForm-@content.Content.Id" onsubmit="addComment(event, @content.Content.Id)">
+                            <input type="text" name="Comment" placeholder="Yorumunuz..." required />
+                            <button type="submit" class="btn btn-primary">Yorum Yap</button>
+                        </form>
+
+
+
                         <div class="accordion" id="accordionPanelsStayOpenExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="panelsStayOpen-headingOne">
@@ -71,27 +88,28 @@
                                         @foreach (ContentComment comment in content.ContentComment)
                                         {
                                             <p>
-                                                <strong>@comment.Owner.UserName: </strong> 
+                                                <strong>@comment.Owner.UserName: </strong>
                                                 <span id="comment-@comment.Id">@comment.Comment</span>
-                                                <input type="text" id="comment-update-@comment.Id" value="@comment.Comment" style="display: none" />  
+                                                <input type="text" id="comment-update-@comment.Id" value="@comment.Comment" style="display: none" />
                                                 <span style="color:#808080">, @comment.CreateDateHumanReadable</span>
-                                                @if(@comment.OwnerId==@Model.User.Id) {
+                                                @if (@comment.OwnerId == @Model.User.Id)
+                                                {
                                                     <button class="btn btn-warning" id="comment-update-open-@comment.Id" onclick="openCommentUpdateMode(@comment.Id)">Düzenle</button>
                                                     <button class="btn btn-primary" style="display: none" id="comment-update-close-@comment.Id" onclick="updateCommentAndCloseUpdateMode(@comment.Id)">Güncelle</button>
                                                     <button class="btn btn-danger" onclick="deleteComment(@comment.Id)">Sil</button>;
                                                 }
-                                            </p>  
+                                            </p>
                                         }
 
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        
-                    </div>
+
 
                     </div>
+
+                </div>
 
             }
         </div>
@@ -167,28 +185,32 @@
             }
         });
     }
-    @*function addComment(contentId, commentId) {
 
-        alert($('#contentComment-' + commentId).value())
+    function shareContent(contentId) {
+
+        var shareButton = $('#shareContent-' + contentId);
         $.ajax({
-            url: '@Url.Action("AddComment", "HomePage")',
+            url: '@Url.Action("ShareContent", "HomePage")',
             type: 'POST',
             data: {
-                ContentId: Number(contentId),
-                Comment: $('#contentComment-' + commentId).val(),
+                Id: Number(contentId),
+
             },
             success: function (response) {
 
-                @Commentid++
-                    $('#contentComment-' + commentId).val("");
-                    $('#commentCount').text("Yorum: " + response);
+                if (shareButton.hasClass('btn-primary')) {
+                    shareButton.removeClass('btn-primary');
+                    shareButton.addClass('btn-danger');
+                    shareButton.text('Paylaşıldı');
+                }
             },
             error: function () {
 
-                alert('Beğeni artırma işlemi sırasında bir hata oluştu.');
+                alert('Paylaşım paylaşma sırasında bir hata oluştu.');
             }
         });
-    };*@
+    };
+
     function openCommentUpdateMode(commentId) {
         $("#comment-" + commentId).hide();
         $("#comment-update-open-" + commentId).hide();

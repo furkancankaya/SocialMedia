@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-4">
             <div class="card">
-                <img class="card-img-top" src="@Model.Photo" alt="Card image cap">
+                <img class="card-img-top" src="~/Content/Images/UserProfile/@Model.Photo" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">@Model.UserName</h5>
                     <p class="card-text">@Model.Biography</p>
@@ -41,10 +41,10 @@
                     <textarea class="form-control" name="Biography" id="Biography" placeholder="Kendinizi tanımlayın">@Model.Biography</textarea>
 
                     <label for="Photo">Resim</label>
-                    <input class="form-control" type="file" name="Photo" id="Photo" placeholder="Profil resmi" accept="image/*" />
+                    <input class="form-control" type="file" name="Photo" id="Photo" placeholder="Profil resmi" accept=".png, .jpeg, .jpg" value="@Model.Photo" />
 
                 </div>
-                <button type="submit" class="btn btn-primary">Kaydet</button>
+                <button type="submit" class="btn btn-primary">Güncelle</button>
                 <span>@ViewBag.Message</span>
             </form>
         </div>
