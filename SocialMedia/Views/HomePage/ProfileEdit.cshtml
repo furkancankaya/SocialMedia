@@ -2,10 +2,10 @@
 @model User
 
 @{
-    ViewBag.Title = "ProfileEdit";
+    ViewBag.Title = @Model.Name + " "  + @Model.Surname;
 }
 
-<h2>ProfileEdit</h2>
+<h2>@Model.Name @Model.Surname</h2>
 
 <div class="container">
     <div class="row">
@@ -13,7 +13,7 @@
             <div class="card">
                 <img class="card-img-top" src="@Model.Photo" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title"> @Model.UserName</h5>
+                    <h5 class="card-title">@Model.UserName</h5>
                     <p class="card-text">@Model.Biography</p>
                     <a href="@Url.Action("Profile", "HomePage")" class="btn btn-primary">Profile Dön</a>
                 </div>
@@ -23,22 +23,22 @@
             <form method="post" enctype="multipart/form-data">
                 <div class="form-group mb-4">
                     <label for="Name">İsim</label>
-                    <input class="form-control" type="text" name="Name" id="Name" placeholder="İsim" required />
+                    <input class="form-control" type="text" name="Name" id="Name" placeholder="İsim" value="@Model.Name" required />
 
                     <label for="Surname">Soyisim</label>
-                    <input class="form-control" type="text" name="Surname" id="Surname" placeholder="Soyisim" required />
+                    <input class="form-control" type="text" name="Surname" id="Surname" placeholder="Soyisim" value="@Model.Surname" required />
 
                     <label for="UserName">Kullanıcı Adı</label>
-                    <input class="form-control" type="text" name="UserName" id="UserName" placeholder="Kullanıcı Adı" required />
+                    <input class="form-control" type="text" name="UserName" id="UserName" placeholder="Kullanıcı Adı" value="@Model.UserName" required readonly />
 
                     <label for="Mail">E-Mail</label>
-                    <input class="form-control" type="email" name="Mail" id="Mail" placeholder="user@example.com" required />
+                    <input class="form-control" type="email" name="Mail" id="Mail" placeholder="user@example.com" value="@Model.Mail" required />
 
                     <label for="Password">Şifre</label>
                     <input class="form-control" type="password" name="Password" id="Password" placeholder="**************" required />
 
                     <label for="Biography">Biyografi</label>
-                    <textarea class="form-control" name="Biography" id="Biography" placeholder="Kendinizi tanımlayın"></textarea>
+                    <textarea class="form-control" name="Biography" id="Biography" placeholder="Kendinizi tanımlayın">@Model.Biography</textarea>
 
                     <label for="Photo">Resim</label>
                     <input class="form-control" type="file" name="Photo" id="Photo" placeholder="Profil resmi" accept="image/*" />

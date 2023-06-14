@@ -146,7 +146,7 @@ namespace SocialMedia.Controllers
         }
 
         [HttpPost]
-        public ActionResult ProfileEdit(User user)
+        public ActionResult ProfileEdit(User user, HttpPostedFileBase Photo)
         {
             if (user != null)
             {
@@ -157,7 +157,17 @@ namespace SocialMedia.Controllers
                 }
                 int id = Convert.ToInt32(Session["id"]);
 
-                
+                if (Photo != null && Photo.ContentLength > 0 && (Photo.ContentType == "image/png" 
+                    || Photo.ContentType == "image/jpeg" || Photo.ContentType == "image/jpg"))
+                {
+                    string objectPath = "";
+                    string objectName = "";
+
+                    objectName = Guid.NewGuid().ToString() + Path.GetFileName(Photo.FileName);
+                    objectPath = Path.Combine(Server.MapPath("~/Content/Images/UserProfile"), objectName);
+                    Photo.SaveAs(objectPath);
+                    user.Photo = objectName;
+                }
 
                 user.Id = id;
                 bool status = userRepository.Update(user);
