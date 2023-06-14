@@ -74,7 +74,7 @@
                                                 <strong>@comment.Owner.UserName: </strong> 
                                                 <span id="comment-@comment.Id">@comment.Comment</span>
                                                 <input type="text" id="comment-update-@comment.Id" value="@comment.Comment" style="display: none" />  
-                                                date: @comment.CreateDate
+                                                <span style="color:#808080">, @comment.CreateDateHumanReadable</span>
                                                 @if(@comment.OwnerId==@Model.User.Id) {
                                                     <button class="btn btn-warning" id="comment-update-open-@comment.Id" onclick="openCommentUpdateMode(@comment.Id)">Düzenle</button>
                                                     <button class="btn btn-primary" style="display: none" id="comment-update-close-@comment.Id" onclick="updateCommentAndCloseUpdateMode(@comment.Id)">Güncelle</button>

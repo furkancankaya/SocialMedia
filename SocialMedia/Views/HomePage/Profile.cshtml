@@ -73,7 +73,7 @@
                                     @foreach (ContentComment comment in content.ContentComment)
                                     {
 
-                                        <p><strong>@comment.Owner.UserName: </strong> @comment.Comment   date: @comment.CreateDate  @if (@comment.OwnerId == @Model.User.Id)
+                                        <p><strong>@comment.Owner.UserName: </strong> @comment.Comment   <span style="color:#808080">, @comment.CreateDateHumanReadable</span>  @if (@comment.OwnerId == @Model.User.Id)
                                         {<span class="btn btn-warning">Düzenle</span><span class="btn btn-danger">Sil</span>;
                                         }</p>
 

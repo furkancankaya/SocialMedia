@@ -14,6 +14,9 @@ namespace SocialMedia.Models
         public Content Content { get; set; }
         public string Comment { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
+
+        [NotMapped]
+        public string CreateDateHumanReadable { get; set; }
     }
 
 }

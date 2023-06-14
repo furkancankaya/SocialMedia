@@ -38,6 +38,10 @@ namespace SocialMedia.Repositories
             var data = db.ContentComment
                 .Include("Owner")
                 .Where(x => x.ContentId == contentId).ToList();
+            foreach( ContentComment comment in data)
+            {
+                comment.CreateDateHumanReadable = this.FormatTimeAgo(comment.CreateDate);
+            }
             return data;
         }
         public ContentComment GetById(int id)
@@ -50,6 +54,42 @@ namespace SocialMedia.Repositories
             db.ContentComment.AddOrUpdate(entity);
             db.SaveChanges();
             return true;
+        }
+
+        // Function to format time in a relative format
+        public string FormatTimeAgo(DateTime timestamp)
+        {
+            TimeSpan timeDifference = DateTime.Now - timestamp;
+
+            if (timeDifference.TotalSeconds < 60)
+            {
+                return "Just now";
+            }
+            else if (timeDifference.TotalMinutes < 60)
+            {
+                int minutes = (int)timeDifference.TotalMinutes;
+                return $"{minutes} {(minutes == 1 ? "minute" : "minutes")} ago";
+            }
+            else if (timeDifference.TotalHours < 24)
+            {
+                int hours = (int)timeDifference.TotalHours;
+                return $"{hours} {(hours == 1 ? "hour" : "hours")} ago";
+            }
+            else if (timeDifference.TotalDays < 30)
+            {
+                int days = (int)timeDifference.TotalDays;
+                return $"{days} {(days == 1 ? "day" : "days")} ago";
+            }
+            else if (timeDifference.TotalDays < 365)
+            {
+                int months = (int)(timeDifference.TotalDays / 30);
+                return $"{months} {(months == 1 ? "month" : "months")} ago";
+            }
+            else
+            {
+                int years = (int)(timeDifference.TotalDays / 365);
+                return $"{years} {(years == 1 ? "year" : "years")} ago";
+            }
         }
     }
 }
