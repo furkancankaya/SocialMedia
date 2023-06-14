@@ -73,9 +73,18 @@
                                     @foreach (ContentComment comment in content.ContentComment)
                                     {
 
-                                        <p><strong>@comment.Owner.UserName: </strong> @comment.Comment   <span style="color:#808080">, @comment.CreateDateHumanReadable</span>  @if (@comment.OwnerId == @Model.User.Id)
-                                        {<span class="btn btn-warning">Düzenle</span><span class="btn btn-danger">Sil</span>;
-                                        }</p>
+                                        <p>
+                                            <strong>@comment.Owner.UserName: </strong>
+                                            <span id="comment-@comment.Id">@comment.Comment</span>
+                                            <input type="text" id="comment-update-@comment.Id" value="@comment.Comment" style="display: none" />
+                                            <span style="color:#808080">, @comment.CreateDateHumanReadable</span>
+                                            @if (@comment.OwnerId == @Model.User.Id)
+                                            {
+                                                <button class="btn btn-warning" id="comment-update-open-@comment.Id" onclick="openCommentUpdateMode(@comment.Id)">Düzenle</button>
+                                                <button class="btn btn-primary" style="display: none" id="comment-update-close-@comment.Id" onclick="updateCommentAndCloseUpdateMode(@comment.Id)">Güncelle</button>
+                                                <button class="btn btn-danger" onclick="deleteComment(@comment.Id)">Sil</button>;
+                                            }
+                                        </p>
 
                                     }
 
@@ -130,6 +139,44 @@
             },
             error: function () {
                 alert('Yorum ekleme işlemi sırasında bir hata oluştu.');
+            }
+        });
+    }
+
+    function openCommentUpdateMode(commentId) {
+        $("#comment-" + commentId).hide();
+        $("#comment-update-open-" + commentId).hide();
+        $("#comment-update-" + commentId).show();
+        $("#comment-update-close-" + commentId).show();
+    }
+
+    function updateCommentAndCloseUpdateMode(commentId) {
+        // get updated comment
+        let updatedComment = $("#comment-update-" + commentId).val();
+        if (updatedComment.trim().length === 0) {
+            alert("Lütfen yorumu boş bırakmayın");
+            return;
+        }
+
+        // update it on database
+        $.ajax({
+            url: '@Url.Action("UpdateComment", "HomePage")',
+            type: 'POST',
+            data: {
+                Id: commentId,
+                Comment: updatedComment
+            },
+            success: function (response) {
+                $("#comment-" + commentId).show();
+                $("#comment-update-open-" + commentId).show();
+                $("#comment-update-" + commentId).hide();
+                $("#comment-update-close-" + commentId).hide();
+
+                // update comment on UI
+                $("#comment-" + commentId).text(updatedComment);
+            },
+            error: function () {
+                alert('Yorum güncelleme işlemi sırasında bir hata oluştu.');
             }
         });
     }
